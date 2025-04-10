@@ -1,0 +1,44 @@
+<h1>TO-DO LIST</h1>
+<input class="inputFilter" type="text"/>
+<button class="filter">Filter</button>
+<input class="input" type="text"/>
+<button class="add">Add</button>
+<div class="list"></div>
+<script>
+    const input = document.querySelector(".input")
+    const button = document.querySelector(".add")
+    const filter = document.querySelector(".inputFilter")
+    const buttonFilter = document.querySelector(".filter")
+    const divContainer = document.querySelector(".list")
+    const data = localStorage.getItem('todo') || '[]'
+    const list = JSON.parse(data)
+    const render = (arr = list) => {
+        const newData = JSON.stringify(list)
+        localStorage.setItem('todo', newData)
+        divContainer.innerHTML =  arr.reduce((acc,e)=>{
+            return  acc + `<h1 class = "todo">${e}</h1>`
+        },"")
+        
+        const allToDo = document.querySelectorAll(".todo")
+        allToDo.forEach((e,i) =>{
+            e.onclick = () =>{
+                list.splice(i,1)
+                render()
+            }
+        })
+    }
+    button.onclick = () => {
+        let str = input.value
+        list.unshift(str)
+        render()
+    }
+    buttonFilter.onclick = () => {
+        const newList = list.filter((e)=>{
+            return e.includes(filter.value)
+        })
+
+        render(newList)
+    }
+    render()
+    
+</script>
